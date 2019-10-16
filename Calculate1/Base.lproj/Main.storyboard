@@ -278,7 +278,7 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="hDV-eM-kft" secondAttribute="bottom" constant="20" id="dk9-g4-PLv"/>
                             <constraint firstItem="YvM-2Q-xL2" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="hVW-Bs-8bf"/>
                             <constraint firstItem="hDV-eM-kft" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="101" id="vjs-qm-RN2">
-                                <variation key="heightClass=compact" constant="10"/>
+                                <variation key="heightClass=compact" constant="20"/>
                             </constraint>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="YvM-2Q-xL2" secondAttribute="trailing" id="vmY-vs-Jqa"/>
                             <constraint firstItem="hDV-eM-kft" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.55" id="zAx-ug-2Ci"/>
