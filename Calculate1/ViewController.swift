@@ -14,19 +14,16 @@ class ViewController: UIViewController {
 
     @IBOutlet var buttons: [UIButton]!
 
-    @IBOutlet var button1: UIButton!
+    var num1: Double?
 
-    var num1: Double = 0
-
-    var num2: Double = 0
+    var num2: Double?
 
     var isNum2: Bool = false
 
     var decimalPointFlag: Bool = false
 
-    // TODO:拼写错误
-    var operatorr: String = ""
-
+    var oneOperator: String?
+    
     override func loadView() {
         super.loadView()
         print("loadView")
@@ -71,79 +68,91 @@ class ViewController: UIViewController {
         super.viewDidDisappear(animated)
         print("viewDidDisappear")
     }
-
-    // TODO:拼写错误
-    @IBAction func clike(_ button: UIButton) {
-
-        // TODO: ！ ？ 的区别，怎么更合理的使用？  抽方法，合理命名来表示该方法做了什么事情
-        if showNumber.text! == "0" || (isNum2 && num2 == 0 && showNumber.text != "0.") || (operatorr == "" && !decimalPointFlag) {
+    
+    func cleanShowNumber() {
+        if showNumber.text == "0" || (isNum2 && num2 == nil && showNumber.text != "0.") || (oneOperator == nil && !decimalPointFlag) {
             showNumber.text = ""
-        }
-
-        showNumber.text = showNumber.text! + button.titleLabel!.text!
-
-        // TODO: 有共性的代码抽方法
-        if isNum2 {
-            num2 = NSString(string: showNumber.text!).doubleValue
-        } else {
-            num1 = NSString(string: showNumber.text!).doubleValue
         }
     }
 
-    // TODO:拼写错误
-    @IBAction func decimalPointClike() {
+    @IBAction func numberClick(_ sender: UIButton) {
+
+        cleanShowNumber()
+        
+        guard let title = sender.currentTitle, var showNumberText = showNumber.text else {
+            // TODO: others
+            print("-----------------title empty")
+            return
+        }
+        
+        showNumberText += title
+        showNumber.text = showNumberText
+
+        evaluate(showNumberText: showNumberText)
+    }
+
+    private func evaluate(showNumberText: String){
+        if isNum2 {
+            num2 = NSString(string: showNumberText).doubleValue
+        } else {
+            num1 = NSString(string: showNumberText).doubleValue
+        }
+    }
+    
+    @IBAction func decimalPointClick() {
         if !decimalPointFlag {
-            showNumber.text = showNumber.text! + "."
-            if isNum2 {
-                num2 = (showNumber.text! as NSString).doubleValue
-            } else {
-                num1 = (showNumber.text! as NSString).doubleValue
+            
+            guard var showNumberText = showNumber.text else {
+                return
             }
+            
+            showNumberText += "."
+            showNumber.text = showNumberText
+            
+            evaluate(showNumberText: showNumberText)
 
             decimalPointFlag = !decimalPointFlag
         }
     }
 
-    // TODO:拼写错误
-    @IBAction func operatorClike(_ sender: UIButton) {
+    @IBAction func operatorClick(_ sender: UIButton) {
         isNum2 = true
         decimalPointFlag = false
-        switch sender.titleLabel!.text! {
+        switch sender.currentTitle {
         case "+":
-            operatorr = "+"
+            oneOperator = "+"
         case "-":
-            operatorr = "-"
+            oneOperator = "-"
         case "x":
-            operatorr = "*"
+            oneOperator = "*"
         case "/":
-            operatorr = "/"
+            oneOperator = "/"
         default:
-            operatorr = ""
+            oneOperator = ""
         }
     }
 
-    // TODO:拼写错误
-    @IBAction func resultClike(_ sender: UIButton) {
+    @IBAction func resultClick(_ sender: UIButton) {
         if isNum2 {
-            if operatorr == "/" && num2 == 0 {
-                num1 = 0
-                num2 = 0
-                isNum2 = false
-                decimalPointFlag = false
-                operatorr = ""
+            if oneOperator == "/" && num2 == 0 {
+                cleanClick(sender)
                 return
             }
 
             var result: Double = 0
-            switch operatorr {
+            guard let number1 = num1, let number2 = num2 else {
+                return
+            }
+            
+            switch oneOperator {
             case "+":
-                result = num1 + num2
+                result = number1 + number2
             case "-":
-                result = num1 - num2
+                result = number1 - number2
             case "*":
-                result = num1 * num2
+                result = number1 * number2
             case "/":
-                result = num1 / num2
+                result = number1 / number2
             default:
                 result = 0
             }
@@ -151,34 +160,22 @@ class ViewController: UIViewController {
             showNumber.text = result.description
 
             num1 = result
-            num2 = 0
+            num2 = nil
             isNum2 = false
-            operatorr = ""
+            oneOperator = nil
         }
     }
 
 
     // TODO:拼写错误
-    @IBAction func clearClike(_ sender: UIButton) {
+    @IBAction func cleanClick(_ sender: UIButton) {
         showNumber.text = "0"
-        num1 = 0
-        num2 = 0
+        num1 = nil
+        num2 = nil
         isNum2 = false
         decimalPointFlag = false
-        operatorr = ""
+        oneOperator = nil
     }
 
-}
-
-class roundnessButton: UIButton {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        layer.cornerRadius = 0.5 * bounds.size.height
-    }
-
-    // TODO: 为什么需要init？
-    required init?(coder: NSCoder) {
-        fatalError()
-    }
 }
 
