@@ -11,7 +11,7 @@ import Foundation
 struct Card {
     var isFaceUp = false
     var isMatch = false
-    private(set) var id: Int
+    private var id: Int
     
     private static var identifierFactor = 0
     
@@ -24,4 +24,15 @@ struct Card {
         self.id = Card.getIdentifier()
     }
     
+}
+
+extension Card: Hashable {
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    
+    static func ==(lhs: Card, rhs: Card) -> Bool {
+        return lhs.id == rhs.id
+    }
 }
